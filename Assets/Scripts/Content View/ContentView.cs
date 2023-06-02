@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class ContentView : MonoBehaviour
 {
-    [SerializeField] Text _titleText;
     [SerializeField] Button _backButton;
 
     [SerializeField] Transform _popupParentTransform;
@@ -25,7 +24,6 @@ public class ContentView : MonoBehaviour
     private void BackToPreviousContent()
     {
         _currentContent = _previousContent;
-        _titleText.text = _currentTab.TabName;
         CheckForBackButton();
     }
 

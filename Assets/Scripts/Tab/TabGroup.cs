@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TabGroup : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class TabGroup : MonoBehaviour
     [SerializeField] Color _tabActiveColor;
     [SerializeField] TabButton _selectedTab;
     [SerializeField] List<GameObject> _contentsList;
+    [SerializeField] Text _titleText;
     
     public void Start()
     {
@@ -32,6 +34,7 @@ public class TabGroup : MonoBehaviour
             else
                 _contentsList[i].SetActive(false);
         }
+        _titleText.text = _selectedTab.TabName;
     }
     public void ResetTabs()
     {
