@@ -6,6 +6,12 @@ public class ContentView : MonoBehaviour
     [SerializeField] Text _titleText;
     [SerializeField] Button _backButton;
 
+    [SerializeField] Transform _popupParentTransform;
+    [SerializeField] Transform _viewParentTransform;
+
+    public Transform PopupParentTransform { get { return _popupParentTransform; } }
+    public Transform ViewParentTransform { get { return _viewParentTransform; } }
+
     private Content _currentContent;
     private Content _previousContent => _currentContent.PreviousContent;
 
@@ -34,6 +40,4 @@ public class ContentView : MonoBehaviour
             _backButton.gameObject.SetActive(true);
         }
     }
-
-
 }
