@@ -17,7 +17,7 @@ public class UIDragableItem : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     public void OnBeginDrag(PointerEventData eventData)
     {
         var slotTransform = _rectTransform.parent;
-        _parentSlot = slotTransform.GetComponent<UIDropableSlot>();
+        //_parentSlot = slotTransform.GetComponent<UIDropableSlot>();
         slotTransform.SetAsLastSibling();
         _canvasGroup.blocksRaycasts = false;
     }

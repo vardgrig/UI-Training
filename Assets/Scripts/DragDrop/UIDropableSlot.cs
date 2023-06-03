@@ -1,27 +1,47 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class UIDropableSlot : MonoBehaviour, IDropHandler
 {
-    private UIDragableItem _item;
+    private UIDragableItem _currentItem;
+    public UIDragableItem CurrentItem { set { _currentItem = value; } }
+
     private void Start()
     {
         if(transform.childCount > 0)
-            _item = GetComponentInChildren<UIDragableItem>();
+            _currentItem = GetComponentInChildren<UIDragableItem>();
     }
     public void OnDrop(PointerEventData eventData)
     {
+
         var otherItemTransform = eventData.pointerDrag.transform;
         var otherDragableItem = otherItemTransform.GetComponent<UIDragableItem>();
-        if (_item != null)
+        if (otherDragableItem == null)
+            return;
+        if (_currentItem != null)
         {
-            _item.transform.SetParent(otherDragableItem.ParentSlot.transform);
-            _item.ParentSlot = otherItemTransform.parent.GetComponent<UIDropableSlot>();
-            _item.GetComponent<RectTransform>().localPosition = Vector3.zero;
+            SwapCurrentItem(otherDragableItem, otherItemTransform);
         }
-        _item = otherDragableItem;
-        _item.transform.SetParent(transform);
-        _item.ParentSlot = this;
-        _item.GetComponent<RectTransform>().localPosition = Vector3.zero;
+        else
+        {
+            EmptyOtherSlot(otherDragableItem.ParentSlot);
+        }
+        _currentItem = otherDragableItem;
+        _currentItem.transform.SetParent(transform);
+        _currentItem.ParentSlot = this;
+        _currentItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
+    }
+
+    private void SwapCurrentItem(UIDragableItem otherItem, Transform otherItemTransform)
+    {
+        _currentItem.transform.SetParent(otherItem.ParentSlot.transform);
+        _currentItem.ParentSlot = otherItemTransform.parent.GetComponent<UIDropableSlot>();
+        _currentItem.ParentSlot.CurrentItem = _currentItem;
+        _currentItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
+    }
+    private void EmptyOtherSlot(UIDropableSlot slot)
+    {
+        slot.CurrentItem = null;
     }
 }
