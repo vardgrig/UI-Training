@@ -14,23 +14,16 @@ public class UIDropableSlot : MonoBehaviour, IDropHandler
     }
     public void OnDrop(PointerEventData eventData)
     {
-
         var otherItemTransform = eventData.pointerDrag.transform;
-        var otherDragableItem = otherItemTransform.GetComponent<UIDragableItem>();
-        if (otherDragableItem == null)
+        if (!otherItemTransform.TryGetComponent<UIDragableItem>(out var otherDragableItem))
             return;
+        
         if (_currentItem != null)
-        {
             SwapCurrentItem(otherDragableItem, otherItemTransform);
-        }
         else
-        {
             EmptyOtherSlot(otherDragableItem.ParentSlot);
-        }
-        _currentItem = otherDragableItem;
-        _currentItem.transform.SetParent(transform);
-        _currentItem.ParentSlot = this;
-        _currentItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
+
+        ReplaceCurrentItem(otherDragableItem);
     }
 
     private void SwapCurrentItem(UIDragableItem otherItem, Transform otherItemTransform)
@@ -40,6 +33,15 @@ public class UIDropableSlot : MonoBehaviour, IDropHandler
         _currentItem.ParentSlot.CurrentItem = _currentItem;
         _currentItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
     }
+
+    private void ReplaceCurrentItem(UIDragableItem otherItem)
+    {
+        _currentItem = otherItem;
+        _currentItem.transform.SetParent(transform);
+        _currentItem.ParentSlot = this;
+        _currentItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
+    }
+
     private void EmptyOtherSlot(UIDropableSlot slot)
     {
         slot.CurrentItem = null;
